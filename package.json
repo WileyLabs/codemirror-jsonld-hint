@@ -1,0 +1,25 @@
+{
+  "name": "codemirror-jsonld-hint",
+  "version": "1.0.0",
+  "description": "JSON-LD property hinter for CodeMirror",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "CodeMirror",
+    "JSON-LD",
+    "autosuggest",
+    "autocomplete",
+    "hinting",
+    "hinter"
+  ],
+  "author": "John Wiley & Sons, Inc.",
+  "contributors": [
+    {
+      "name": "BigBlueHat",
+      "email": "byoung@bigbluehat.com"
+    }
+  ],
+  "license": "MIT"
+}
