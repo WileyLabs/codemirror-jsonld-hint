@@ -2,6 +2,7 @@
   "name": "codemirror-jsonld-hint",
   "version": "1.0.0",
   "description": "JSON-LD property hinter for CodeMirror",
+  "repository": "https://github.com/WileyLabs/codemirror-jsonld-hint",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
