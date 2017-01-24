@@ -10,15 +10,24 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/addon/hint/show-hint.min.css" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.css" />
   <link rel="edit-form" href="https://github.com/WileyLabs/codemirror-jsonld-hint/edit/master/index.html" />
+  <style>
+  code { background: #eee; padding: 0.2em }
+  hr { border: 1px solid #ccc; margin: 0 }
+  a.button { float: right; margin-right: 1em }
+  </style>
 </head>
 <body>
-
+  <a class="button" href="https://github.com/WileyLabs/codemirror-jsonld-hint/edit/master/index.html" target="_blank">Fork / Contribute</a>
+  <blockquote>Type <code>@</code> or press <code>Ctrl+Space</code> while the cursor is
+  within a JSON key area.</blockquote>
+  <hr />
 <textarea id="textarea">
 {
   "@context": "http://schema.org/",
   "name": "BigBlueHat"
 }
 </textarea>
+  <hr />
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonlint/1.6.0/jsonlint.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/codemirror.min.js"></script>
