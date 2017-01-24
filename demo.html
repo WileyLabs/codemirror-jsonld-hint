@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>JSON-LD Hinter for CodeMirror</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/codemirror.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/addon/lint/lint.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.22.2/addon/hint/show-hint.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.6/semantic.css" />
+  <link rel="edit-form" href="https://github.com/WileyLabs/codemirror-jsonld-hint/edit/master/index.html" />
+</head>
+<body>
+
+<textarea id="textarea">
+{
+  "@context": "http://schema.org/",
+  "name": "BigBlueHat"
+}
+</textarea>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonlint/1.6.0/jsonlint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/codemirror.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/mode/javascript/javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/lint/lint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/lint/json-lint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/hint/show-hint.min.js"></script>
+  <script src="./index.js"></script>
+  <script>
+    var textarea = document.getElementById('textarea');
+    var editor = CodeMirror.fromTextArea(textarea, {
+      mode: 'application/ld+json',
+      lineNumbers: true,
+      gutters: ["CodeMirror-lint-markers"],
+      lint: true,
+      extraKeys: {
+        "'@'": CodeMirror.hint.jsonld,
+        "Ctrl-Space": CodeMirror.hint.jsonld
+      }
+    });
+  </script>
+</body>
+</html>

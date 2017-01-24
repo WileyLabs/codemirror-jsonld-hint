@@ -4,15 +4,15 @@
 [CodeMirror](http://codemirror.net) add-on provides a helper function that can
 be connected to key events to trigger an autosuggest list.
 
+[Demo](http://wileylabs.github.io/codemirror-jsonld-hint)
+
 ## Usage
 
-NOTE: This add-on *should* be browserify and require.js compatible (as with all
-CodeMirror add-ons). However, only browserify usage has been tested.
-
-After requiring this add-on, add the following to your CodeMirror editor
-configuration:
+After requiring this add-on (via browserify, require.js, or ye olde script tag),
+add the following to your CodeMirror editor configuration:
 
 ```
+  mode: 'application/ld+json',
   extraKeys: {
     "'@'": CodeMirror.hint.jsonld,
     "Ctrl-Space": CodeMirror.hint.jsonld
