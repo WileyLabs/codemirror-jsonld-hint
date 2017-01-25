@@ -25,7 +25,7 @@
       '@type',
       '@vocab'
     ];
-    if (!pred || pred()) setTimeout(function() {
+    setTimeout(function() {
       if (!cm.state.completionActive) {
         cm.showHint({
           completeSingle: false,
@@ -45,9 +45,9 @@
                 });
               }
               return {
-                  list: list, //value[i].listCallback(),
-                  from: CodeMirror.Pos(cur.line, start+2),
-                  to: CodeMirror.Pos(cur.line, end-1)
+                list: list,
+                from: CodeMirror.Pos(cur.line, start+2),
+                to: CodeMirror.Pos(cur.line, end-1)
               };
             }
           }
