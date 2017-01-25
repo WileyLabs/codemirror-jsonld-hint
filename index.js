@@ -28,6 +28,7 @@
     if (!pred || pred()) setTimeout(function() {
       if (!cm.state.completionActive) {
         cm.showHint({
+          completeSingle: false,
           hint: function (cm, options) {
             var cur = cm.getCursor(),
                 token = cm.getTokenAt(cur);
@@ -35,7 +36,7 @@
                 end = token.end;
             var list = terms;
             if (token.type === 'property') {
-              let search = token.string.match(/\w/);
+              var search = token.string.match(/[@]?\w+/);
               if (search !== null) {
                 list = terms.filter(function(t) {
                   if (t.indexOf(search) > -1) {
