@@ -47,7 +47,7 @@
               return {
                 list: list,
                 from: CodeMirror.Pos(cur.line, start+2),
-                to: CodeMirror.Pos(cur.line, end-1)
+                to: CodeMirror.Pos(cur.line, end)
               };
             }
           }
