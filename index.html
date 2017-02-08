@@ -51,8 +51,18 @@
       gutters: ["CodeMirror-lint-markers"],
       lint: true,
       extraKeys: {
-        "'@'": CodeMirror.hint.jsonld,
-        "Ctrl-Space": CodeMirror.hint.jsonld
+        "'@'": function(cm, pred) {
+          var cur = cm.getCursor();
+          if (!pred || pred()) setTimeout(function() {
+            if (!cm.state.completionActive)
+              cm.showHint({completeSingle: false});
+          }, 100);
+          return CodeMirror.Pass;
+        },
+        "Ctrl-Space": "autocomplete"
+      },
+      hintOptions: {
+        hint: CodeMirror.hint.jsonld
       }
     });
   </script>
