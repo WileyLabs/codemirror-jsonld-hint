@@ -60,7 +60,11 @@
     var start = token.start - 1,
         end = token.end;
     var list = terms;
-    if (token.type === 'property') {
+    if (token.type !== 'property') {
+      // early return if it's not what we're looking for
+      return;
+    } else {
+      // token.type === 'property'
       var search = token.string.match(/[@]?\w+/);
       if (search !== null) {
         list = terms.filter(function(t) {
