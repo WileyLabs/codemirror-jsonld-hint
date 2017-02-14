@@ -26,12 +26,16 @@
     </h1>
     Type <code>@</code> or press <code>Ctrl+Space</code> while the cursor is
     within a JSON key area.
+    Type <code>schema:</code> (currently) while the cursor is within a JSON key
+    to autocomplete <a href="http://schema.org/">schema.org</a> terms.
   </div>
   <hr />
 <textarea id="textarea">
 {
-  "@context": "http://schema.org/",
-  "name": "BigBlueHat"
+  "@context": {
+    "schema": "http://schema.org/"
+  },
+  "schema:name": "BigBlueHat"
 }
 </textarea>
   <hr />
@@ -42,8 +46,32 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/lint/lint.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/lint/json-lint.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.23.0/addon/hint/show-hint.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsonld/0.4.11/jsonld.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.min.js"></script>
   <script src="./index.js"></script>
   <script>
+    function collectContextTerms(url) {
+      var p = new Promise(function(resolve, reject) {
+        jsonld.processContext(null, null, function(err, _ctx) {
+          jsonld.processContext(_ctx, {"@context": "http://schema.org/"},
+            function(err, __ctx) {
+              if (err) reject(err);
+              resolve(Object.keys(__ctx.mappings));
+            });
+        })
+      });
+      return p;
+    }
+
+    // TODO: provide API for loading prefix/contexts
+    // TODO: heavily cache this stuff (see custom JSON-LD doc loader)
+    // TODO: don't initiate/add this hinter until the prefix(es) are loaded
+    var contexts = {};
+    collectContextTerms('http://schema.org/')
+      .then(function(terms) {
+        contexts.schema = terms;
+      });
+
     var textarea = document.getElementById('textarea');
     var editor = CodeMirror.fromTextArea(textarea, {
       mode: 'application/ld+json',
@@ -59,10 +87,54 @@
           }, 100);
           return CodeMirror.Pass;
         },
+        "':'": function(cm, pred) {
+          var cur = cm.getCursor();
+          if (!pred || pred()) setTimeout(function() {
+            if (!cm.state.completionActive)
+              cm.showHint({
+                completeSingle: false,
+                hint: function(cm, options) {
+                  var cur = cm.getCursor(),
+                      token = cm.getTokenAt(cur);
+                  var start = token.start - 1,
+                      end = token.end;
+                  var colon_at = token.string.indexOf(':');
+                  if (token.type !== 'property') {
+                    return;
+                  } else if (colon_at > -1) {
+                    // remove any `"` form the lookup (typically start/end)
+                    var search = token.string.replace('"', '').split(':');
+                    var prefix = search[0];
+                    var suffix = search[1];
+                    if (prefix in options.contexts) {
+                      var terms = options.contexts[prefix];
+                      var list = terms.map(function(item) {
+                        if (item.indexOf(suffix) > -1) {
+                          return {
+                            text: prefix + ':' + item,
+                            displayText: item
+                          };
+                        }
+                      }).filter(function(item) {
+                        return item
+                      });
+                      return {
+                        list: list,
+                        from: CodeMirror.Pos(cur.line, start+2),
+                        to: CodeMirror.Pos(cur.line, end)
+                      };
+                    }
+                  }
+                }
+              });
+          }, 100);
+          return CodeMirror.Pass;
+        },
         "Ctrl-Space": "autocomplete"
       },
       hintOptions: {
-        hint: CodeMirror.hint.jsonld
+        hint: CodeMirror.hint.jsonld,
+        contexts: contexts
       }
     });
   </script>
