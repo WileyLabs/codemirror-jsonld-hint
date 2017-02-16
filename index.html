@@ -33,9 +33,15 @@
 <textarea id="textarea">
 {
   "@context": {
-    "schema": "http://schema.org/"
+    "schema": "http://schema.org/",
+    "anno": "http://www.w3.org/ns/anno.jsonld"
   },
-  "schema:name": "BigBlueHat"
+  "anno:target": "http://bigbluehat.com/",
+  "anno:motivation": "anno:bookmarking",
+  "anno:creator": {
+    "@type": "anno:Person",
+    "schema:name": "BigBlueHat"
+  }
 }
 </textarea>
   <hr />
