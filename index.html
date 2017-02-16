@@ -67,21 +67,16 @@
         })
       })
       .then(function(terms) {
-        // TODO: is there a better method than convention for determining the
-        // a property term vs. a value term?
-        // TODO: this rashly assumes initial a-z and A-Z are sufficient >_>
+        // TODO: this rashly assumes initial a-z are sufficient for determining
+        // possible key names...
         var property = terms.filter(function(term) {
           // between a and z
           return (term.charCodeAt(0) >= 97 && term.charCodeAt(0) <= 122);
         });
-        var string =  terms.filter(function(term) {
-          // between A and Z
-          return (term.charCodeAt(0) >= 65 && term.charCodeAt(0) <= 90);
-        });
         return {
           prefix: prefix,
           property: property,
-          string: string
+          string: terms
         };
       });
     }
