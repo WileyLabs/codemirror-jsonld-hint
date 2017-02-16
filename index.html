@@ -26,8 +26,8 @@
     </h1>
     Type <code>@</code> or press <code>Ctrl+Space</code> while the cursor is
     within a JSON key area.
-    Type <code>schema:</code> (currently) while the cursor is within a JSON key
-    to autocomplete <a href="http://schema.org/">schema.org</a> terms.
+    Type <code>schema:</code> or <code>anno:</code> (for this example) while
+    the cursor is within a JSON key or value to autocomplete terms.
   </div>
   <hr />
 <textarea id="textarea">
@@ -50,8 +50,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/es6-promise/4.0.5/es6-promise.min.js"></script>
   <script src="./index.js"></script>
   <script>
-    function collectContextTerms(url) {
-      var p = new Promise(function(resolve, reject) {
+    function collectContextTerms(prefix, url) {
+      return new Promise(function(resolve, reject) {
         jsonld.processContext(null, null, function(err, _ctx) {
           jsonld.processContext(_ctx, {"@context": url},
             function(err, __ctx) {
@@ -59,8 +59,8 @@
               resolve(Object.keys(__ctx.mappings));
             });
         })
-      });
-      return p.then(function(terms) {
+      })
+      .then(function(terms) {
         // TODO: is there a better method than convention for determining the
         // a property term vs. a value term?
         // TODO: this rashly assumes initial a-z and A-Z are sufficient >_>
@@ -73,20 +73,21 @@
           return (term.charCodeAt(0) >= 65 && term.charCodeAt(0) <= 90);
         });
         return {
+          prefix: prefix,
           property: property,
           string: string
         };
       });
     }
 
-    // TODO: provide API for loading prefix/contexts
-    // TODO: heavily cache this stuff (see custom JSON-LD doc loader)
-    // TODO: don't initiate/add this hinter until the prefix(es) are loaded
-    var contexts = {};
-    collectContextTerms('http://schema.org/')
-      .then(function(terms) {
-        contexts.schema = terms;
-      });
+    function materializeContextsInto(contexts, prefix_urls) {
+      for (prefix in prefix_urls) {
+        collectContextTerms(prefix, prefix_urls[prefix])
+          .then(function(terms) {
+            contexts[terms.prefix] = terms;
+          });
+      }
+    }
 
     var textarea = document.getElementById('textarea');
     var editor = CodeMirror.fromTextArea(textarea, {
@@ -151,9 +152,17 @@
       },
       hintOptions: {
         hint: CodeMirror.hint.jsonld,
-        contexts: contexts
+        contexts: {}
       }
     });
+
+    materializeContextsInto(
+      editor.options.hintOptions.contexts,
+      {
+        schema: 'http://schema.org/',
+        anno: 'http://www.w3.org/ns/anno.jsonld'
+      }
+    );
   </script>
 </body>
 </html>
