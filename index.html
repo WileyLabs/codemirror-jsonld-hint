@@ -60,15 +60,7 @@
             });
         })
       });
-      return p;
-    }
-
-    // TODO: provide API for loading prefix/contexts
-    // TODO: heavily cache this stuff (see custom JSON-LD doc loader)
-    // TODO: don't initiate/add this hinter until the prefix(es) are loaded
-    var contexts = {};
-    collectContextTerms('http://schema.org/')
-      .then(function(terms) {
+      return p.then(function(terms) {
         // TODO: is there a better method than convention for determining the
         // a property term vs. a value term?
         // TODO: this rashly assumes initial a-z and A-Z are sufficient >_>
@@ -80,10 +72,20 @@
           // between A and Z
           return (term.charCodeAt(0) >= 65 && term.charCodeAt(0) <= 90);
         });
-        contexts.schema = {
+        return {
           property: property,
           string: string
         };
+      });
+    }
+
+    // TODO: provide API for loading prefix/contexts
+    // TODO: heavily cache this stuff (see custom JSON-LD doc loader)
+    // TODO: don't initiate/add this hinter until the prefix(es) are loaded
+    var contexts = {};
+    collectContextTerms('http://schema.org/')
+      .then(function(terms) {
+        contexts.schema = terms;
       });
 
     var textarea = document.getElementById('textarea');
