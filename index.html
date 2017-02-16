@@ -53,7 +53,7 @@
     function collectContextTerms(url) {
       var p = new Promise(function(resolve, reject) {
         jsonld.processContext(null, null, function(err, _ctx) {
-          jsonld.processContext(_ctx, {"@context": "http://schema.org/"},
+          jsonld.processContext(_ctx, {"@context": url},
             function(err, __ctx) {
               if (err) reject(err);
               resolve(Object.keys(__ctx.mappings));
