@@ -69,7 +69,21 @@
     var contexts = {};
     collectContextTerms('http://schema.org/')
       .then(function(terms) {
-        contexts.schema = terms;
+        // TODO: is there a better method than convention for determining the
+        // a property term vs. a value term?
+        // TODO: this rashly assumes initial a-z and A-Z are sufficient >_>
+        var property = terms.filter(function(term) {
+          // between a and z
+          return (term.charCodeAt(0) >= 97 && term.charCodeAt(0) <= 122);
+        });
+        var string =  terms.filter(function(term) {
+          // between A and Z
+          return (term.charCodeAt(0) >= 65 && term.charCodeAt(0) <= 90);
+        });
+        contexts.schema = {
+          property: property,
+          string: string
+        };
       });
 
     var textarea = document.getElementById('textarea');
@@ -99,15 +113,16 @@
                   var start = token.start - 1,
                       end = token.end;
                   var colon_at = token.string.indexOf(':');
-                  if (token.type !== 'property') {
+                  if (token.type !== 'property' && token.type !== 'string') {
                     return;
                   } else if (colon_at > -1) {
                     // remove any `"` form the lookup (typically start/end)
-                    var search = token.string.replace('"', '').split(':');
+                    var search = token.string.replace(/"/gi, '').split(':');
                     var prefix = search[0];
                     var suffix = search[1];
-                    if (prefix in options.contexts) {
-                      var terms = options.contexts[prefix];
+                    if (prefix in options.contexts
+                        && token.type in options.contexts[prefix]) {
+                      var terms = options.contexts[prefix][token.type];
                       var list = terms.map(function(item) {
                         if (item.indexOf(suffix) > -1) {
                           return {
