@@ -33,14 +33,14 @@
 <textarea id="textarea">
 {
   "@context": {
-    "schema": "http://schema.org/",
-    "anno": "http://www.w3.org/ns/anno.jsonld"
+    "@vocab": "http://www.w3.org/ns/anno.jsonld",
+    "schema": "http://schema.org/"
   },
-  "anno:target": "http://bigbluehat.com/",
-  "anno:motivation": "anno:bookmarking",
-  "anno:creator": {
-    "@type": "anno:Person",
-    "schema:name": "BigBlueHat"
+  "target": "http://bigbluehat.com/",
+  "motivation": "bookmarking",
+  "creator": {
+    "@type": "Person",
+    "schema:alternateName": "BigBlueHat"
   }
 }</textarea>
   <hr />
@@ -123,13 +123,18 @@
                     var search = token.string.replace(/"/gi, '').split(':');
                     var prefix = search[0];
                     var suffix = search[1];
+                    if (!prefix) {
+                      prefix = '@vocab';
+                    }
                     if (prefix in options.contexts
                         && token.type in options.contexts[prefix]) {
                       var terms = options.contexts[prefix][token.type];
                       var list = terms.map(function(item) {
                         if (item.indexOf(suffix) > -1) {
                           return {
-                            text: prefix + ':' + item + '"',
+                            text: (prefix !== '@vocab'
+                                   ? prefix + ':' + item + '"'
+                                   : item + '"'),
                             displayText: item
                           };
                         }
@@ -159,8 +164,9 @@
     materializeContextsInto(
       editor.options.hintOptions.contexts,
       {
-        schema: 'http://schema.org/',
-        anno: 'http://www.w3.org/ns/anno.jsonld'
+        // @vocab is the default @vocab...here as in JSON-LD
+        '@vocab': 'http://www.w3.org/ns/anno.jsonld',
+        schema: 'http://schema.org/'
       }
     );
   </script>
