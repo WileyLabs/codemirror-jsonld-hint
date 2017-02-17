@@ -13,36 +13,6 @@
     mod(CodeMirror);
 })(function(CodeMirror) {
 
-  function getText(completion) {
-    if (typeof completion == "string") return completion;
-    else return completion.text;
-  }
-
-  function customHint(cm, data, completion) {
-    // cursor position & token before replacing
-    var cur = cm.getCursor();
-    var token = cm.getTokenAt(cur);
-    // TODO: make suffix configurable?
-    var suffix = '": ""';
-    // range to replace with selected completion
-    var from = completion.from || data.from;
-    var to = completion.to || data.to;
-    var text = getText(completion);
-    var jump_back = 0;
-    // don't add suffix if we're inside of a finished property string (`""`)
-    if (token.string.length > 1 && token.string[token.string.length-1] !== '"') {
-      // move the cursor back by one--inside the value
-      // replace with completion + suffix
-      text += suffix;
-      jump_back = 1;
-    } else {
-      text += '"';
-    }
-    cm.replaceRange(text, from, to, "complete");
-    cm.setCursor(cm.getCursor().line, cm.getCursor().ch - jump_back);
-    CodeMirror.signal(data, "pick", completion);
-  }
-
   var terms = [
     '@base',
     '@container', '@context',
@@ -74,7 +44,12 @@
         });
       }
       return {
-        list: list.map(function(item) { return {text: item, hint: customHint}}),
+        list: list.map(function(item) {
+          return {
+            text: item + '"',
+            displayText: item
+          };
+        }),
         from: CodeMirror.Pos(cur.line, start+2),
         to: CodeMirror.Pos(cur.line, end)
       };
