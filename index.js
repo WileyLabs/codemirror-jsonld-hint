@@ -13,34 +13,36 @@
     mod(CodeMirror);
 })(function(CodeMirror) {
 
-  var terms = [
-    '@base',
-    '@container', '@context',
-    '@graph',
-    '@id',
-    '@language', '@list',
-    '@reverse',
-    '@set',
-    '@type',
-    '@vocab'
-  ];
+  var terms = {
+    property: [
+      '@base',
+      '@container', '@context',
+      '@graph',
+      '@id',
+      '@language', '@list',
+      '@reverse',
+      '@set',
+      '@type',
+      '@vocab'
+    ],
+    // TODO: these can be values of @container...any others like this?
+    string: ["@list", "@index", "@set"]
+  };
   CodeMirror.registerHelper("hint", "jsonld", function(cm, options) {
     var cur = cm.getCursor(),
         token = cm.getTokenAt(cur);
     var start = token.start - 1,
         end = token.end;
-    var list = terms;
-    if (token.type !== 'property') {
+    if (token.type !== 'property' && token.type !== 'string') {
       // early return if it's not what we're looking for
       return;
     } else {
-      // token.type === 'property'
+      // token.type === 'property' || token.type === 'string'
+      var list = terms[token.type];
       var search = token.string.match(/[@]?\w+/);
       if (search !== null) {
-        list = terms.filter(function(t) {
-          if (t.indexOf(search) > -1) {
-            return t;
-          }
+        list = list.filter(function(t) {
+          return (t.indexOf(search) > -1);
         });
       }
       return {
