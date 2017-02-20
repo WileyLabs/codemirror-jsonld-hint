@@ -15,7 +15,24 @@ add the following to your CodeMirror editor configuration:
   mode: 'application/ld+json',
   extraKeys: {
     "'@'": CodeMirror.hint.jsonld,
-    "Ctrl-Space": CodeMirror.hint.jsonld
+    "':'": CodeMirror.hint.jsonldContexts,
+    "Ctrl-Space": "autocomplete"
+  },
+  hintOptions: {
+    // triggered by "autocomplete" hinter (above)
+    hint: CodeMirror.hint.jsonld,
+    // config for the jsonldContexts hinter
+    contexts: {}
+  }
+```
+
+The value of `hintOptions.contexts` should be an object with keys for prefix
+names and (optionally) a default vocabularly set to `@vocab`. For example:
+
+```
+  contexts: {
+    '@vocab': http://www.w3.org/ns/anno.jsonld',
+    schema: 'http://schema.org/'
   }
 ```
 
