@@ -99,17 +99,7 @@
       lint: true,
       extraKeys: {
         "'@'": CodeMirror.hint.jsonld,
-        "':'": function(cm, pred) {
-          var cur = cm.getCursor();
-          if (!pred || pred()) setTimeout(function() {
-            if (!cm.state.completionActive)
-              cm.showHint({
-                completeSingle: false,
-                hint: CodeMirror.hint.jsonldContexts
-              });
-          }, 100);
-          return CodeMirror.Pass;
-        },
+        "':'": CodeMirror.hint.jsonldContexts,
         "Ctrl-Space": "autocomplete"
       },
       hintOptions: {

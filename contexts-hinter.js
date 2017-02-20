@@ -23,7 +23,7 @@
    *   }
    * }
    **/
-  CodeMirror.registerHelper("hint", "jsonldContexts", function(cm, options) {
+  function hint(cm, options) {
     var cur = cm.getCursor(),
         token = cm.getTokenAt(cur);
     var start = token.start - 1,
@@ -61,5 +61,14 @@
         };
       }
     }
+  }
+  CodeMirror.registerHelper("hint", "jsonldContexts", function(cm, options) {
+    setTimeout(function() {
+      cm.showHint({
+        completeSingle: false,
+        hint: hint,
+      });
+    }, 100);
+    return CodeMirror.Pass;
   });
 });
