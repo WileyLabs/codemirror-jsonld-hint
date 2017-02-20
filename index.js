@@ -28,7 +28,7 @@
     // TODO: these can be values of @container...any others like this?
     string: ["@list", "@index", "@set"]
   };
-  CodeMirror.registerHelper("hint", "jsonld", function(cm, options) {
+  function hint(cm, options) {
     var cur = cm.getCursor(),
         token = cm.getTokenAt(cur);
     var start = token.start - 1,
@@ -56,5 +56,12 @@
         to: CodeMirror.Pos(cur.line, end)
       };
     }
+  }
+  CodeMirror.registerHelper("hint", "jsonld", function(cm, options) {
+    cm.showHint({
+      completeSingle: false,
+      hint: hint,
+    });
+    return CodeMirror.Pass;
   });
 });

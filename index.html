@@ -98,17 +98,7 @@
       gutters: ["CodeMirror-lint-markers"],
       lint: true,
       extraKeys: {
-        "'@'": function(cm, pred) {
-          var cur = cm.getCursor();
-          if (!pred || pred()) setTimeout(function() {
-            if (!cm.state.completionActive)
-              cm.showHint({
-                completeSingle: false,
-                hint: CodeMirror.hint.jsonld,
-              });
-          }, 100);
-          return CodeMirror.Pass;
-        },
+        "'@'": CodeMirror.hint.jsonld,
         "':'": function(cm, pred) {
           var cur = cm.getCursor();
           if (!pred || pred()) setTimeout(function() {
