@@ -31,13 +31,17 @@
     var colon_at = token.string.indexOf(':');
     if (token.type !== 'property' && token.type !== 'string') {
       return;
-    } else if (colon_at > -1) {
+    } else {
+      // set prefix to the default @vocab
+      var prefix = '@vocab';
+      var suffix = '';
       // remove any `"` form the lookup (typically start/end)
       var search = token.string.replace(/"/gi, '').split(':');
-      var prefix = search[0];
-      var suffix = search[1];
-      if (!prefix) {
-        prefix = '@vocab';
+      if (search.length > 1) {
+        prefix = search[0];
+        suffix = search[1];
+      } else {
+        suffix = search[0];
       }
       if (prefix in options.contexts
           && token.type in options.contexts[prefix]) {
