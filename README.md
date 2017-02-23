@@ -32,7 +32,7 @@ names and (optionally) a default vocabularly set to `@vocab`. For example:
 
 ```
   contexts: {
-    '@vocab': http://www.w3.org/ns/anno.jsonld',
+    '@vocab': 'http://www.w3.org/ns/anno.jsonld',
     schema: 'http://schema.org/'
   }
 ```
