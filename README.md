@@ -16,6 +16,7 @@ add the following to your CodeMirror editor configuration:
   extraKeys: {
     "'@'": CodeMirror.hint.jsonld,
     "':'": CodeMirror.hint.jsonldContexts,
+    "'\"'": CodeMirror.hint.jsonldContexts,
     "Ctrl-Space": "autocomplete"
   },
   hintOptions: {
