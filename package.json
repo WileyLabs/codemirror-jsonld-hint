@@ -1,9 +1,9 @@
 {
   "name": "codemirror-jsonld-hint",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "JSON-LD property hinter for CodeMirror",
   "repository": "https://github.com/WileyLabs/codemirror-jsonld-hint",
-  "main": "index.js",
+  "main": "jsonld-hinter.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -22,5 +22,8 @@
       "email": "byoung@bigbluehat.com"
     }
   ],
-  "license": "MIT"
+  "license": "MIT",
+  "peerDependencies": {
+    "codemirror": "^5.22.2"
+  }
 }
